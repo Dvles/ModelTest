@@ -29,6 +29,10 @@ class ObjectTool
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    #[ORM\ManyToOne(inversedBy: 'objectTools')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $UserID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +94,18 @@ class ObjectTool
     public function setImage(string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getUserID(): ?User
+    {
+        return $this->UserID;
+    }
+
+    public function setUserID(?User $UserID): static
+    {
+        $this->UserID = $UserID;
 
         return $this;
     }

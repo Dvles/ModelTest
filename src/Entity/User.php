@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -27,6 +29,24 @@ class User
 
     #[ORM\Column(nullable: true)]
     private ?int $rewards = null;
+
+    /**
+     * @var Collection<int, ObjectTool>
+     */
+    #[ORM\OneToMany(targetEntity: ObjectTool::class, mappedBy: 'UserID', orphanRemoval: true)]
+    private Collection $objectTools;
+
+    /**
+     * @var Collection<int, ObjectReview>
+     */
+    #[ORM\OneToMany(targetEntity: ObjectReview::class, mappedBy: 'UserID')]
+    private Collection $objectReviews;
+
+    public function __construct()
+    {
+        $this->objectTools = new ArrayCollection();
+        $this->objectReviews = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +109,66 @@ class User
     public function setRewards(?int $rewards): static
     {
         $this->rewards = $rewards;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ObjectTool>
+     */
+    public function getObjectTools(): Collection
+    {
+        return $this->objectTools;
+    }
+
+    public function addObjectTool(ObjectTool $objectTool): static
+    {
+        if (!$this->objectTools->contains($objectTool)) {
+            $this->objectTools->add($objectTool);
+            $objectTool->setUserID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObjectTool(ObjectTool $objectTool): static
+    {
+        if ($this->objectTools->removeElement($objectTool)) {
+            // set the owning side to null (unless already changed)
+            if ($objectTool->getUserID() === $this) {
+                $objectTool->setUserID(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ObjectReview>
+     */
+    public function getObjectReviews(): Collection
+    {
+        return $this->objectReviews;
+    }
+
+    public function addObjectReview(ObjectReview $objectReview): static
+    {
+        if (!$this->objectReviews->contains($objectReview)) {
+            $this->objectReviews->add($objectReview);
+            $objectReview->setUserID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObjectReview(ObjectReview $objectReview): static
+    {
+        if ($this->objectReviews->removeElement($objectReview)) {
+            // set the owning side to null (unless already changed)
+            if ($objectReview->getUserID() === $this) {
+                $objectReview->setUserID(null);
+            }
+        }
 
         return $this;
     }
