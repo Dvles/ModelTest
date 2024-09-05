@@ -20,6 +20,10 @@ class BorrowObject
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $endDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'borrowObjects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ObjectTool $objectID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class BorrowObject
     public function setEndDate(\DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getObjectID(): ?ObjectTool
+    {
+        return $this->objectID;
+    }
+
+    public function setObjectID(?ObjectTool $objectID): static
+    {
+        $this->objectID = $objectID;
 
         return $this;
     }

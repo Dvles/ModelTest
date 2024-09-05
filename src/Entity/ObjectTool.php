@@ -41,9 +41,16 @@ class ObjectTool
     #[ORM\OneToMany(targetEntity: ObjectReview::class, mappedBy: 'ObjectID', orphanRemoval: true)]
     private Collection $objectReviews;
 
+    /**
+     * @var Collection<int, BorrowObject>
+     */
+    #[ORM\OneToMany(targetEntity: BorrowObject::class, mappedBy: 'objectID', orphanRemoval: true)]
+    private Collection $borrowObjects;
+
     public function __construct()
     {
         $this->objectReviews = new ArrayCollection();
+        $this->borrowObjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +154,36 @@ class ObjectTool
             // set the owning side to null (unless already changed)
             if ($objectReview->getObjectID() === $this) {
                 $objectReview->setObjectID(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BorrowObject>
+     */
+    public function getBorrowObjects(): Collection
+    {
+        return $this->borrowObjects;
+    }
+
+    public function addBorrowObject(BorrowObject $borrowObject): static
+    {
+        if (!$this->borrowObjects->contains($borrowObject)) {
+            $this->borrowObjects->add($borrowObject);
+            $borrowObject->setObjectID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrowObject(BorrowObject $borrowObject): static
+    {
+        if ($this->borrowObjects->removeElement($borrowObject)) {
+            // set the owning side to null (unless already changed)
+            if ($borrowObject->getObjectID() === $this) {
+                $borrowObject->setObjectID(null);
             }
         }
 
