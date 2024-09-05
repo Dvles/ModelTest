@@ -24,6 +24,10 @@ class ObjectReview
     #[ORM\JoinColumn(nullable: false)]
     private ?User $UserID = null;
 
+    #[ORM\ManyToOne(inversedBy: 'objectReviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ObjectTool $ObjectID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +65,18 @@ class ObjectReview
     public function setUserID(?User $UserID): static
     {
         $this->UserID = $UserID;
+
+        return $this;
+    }
+
+    public function getObjectID(): ?ObjectTool
+    {
+        return $this->ObjectID;
+    }
+
+    public function setObjectID(?ObjectTool $ObjectID): static
+    {
+        $this->ObjectID = $ObjectID;
 
         return $this;
     }

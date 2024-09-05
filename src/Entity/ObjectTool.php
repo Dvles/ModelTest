@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ObjectToolRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +34,17 @@ class ObjectTool
     #[ORM\ManyToOne(inversedBy: 'objectTools')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $UserID = null;
+
+    /**
+     * @var Collection<int, ObjectReview>
+     */
+    #[ORM\OneToMany(targetEntity: ObjectReview::class, mappedBy: 'ObjectID', orphanRemoval: true)]
+    private Collection $objectReviews;
+
+    public function __construct()
+    {
+        $this->objectReviews = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,6 +119,36 @@ class ObjectTool
     public function setUserID(?User $UserID): static
     {
         $this->UserID = $UserID;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ObjectReview>
+     */
+    public function getObjectReviews(): Collection
+    {
+        return $this->objectReviews;
+    }
+
+    public function addObjectReview(ObjectReview $objectReview): static
+    {
+        if (!$this->objectReviews->contains($objectReview)) {
+            $this->objectReviews->add($objectReview);
+            $objectReview->setObjectID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObjectReview(ObjectReview $objectReview): static
+    {
+        if ($this->objectReviews->removeElement($objectReview)) {
+            // set the owning side to null (unless already changed)
+            if ($objectReview->getObjectID() === $this) {
+                $objectReview->setObjectID(null);
+            }
+        }
 
         return $this;
     }
