@@ -42,10 +42,17 @@ class User
     #[ORM\OneToMany(targetEntity: ObjectReview::class, mappedBy: 'UserID')]
     private Collection $objectReviews;
 
+    /**
+     * @var Collection<int, LenderReview>
+     */
+    #[ORM\OneToMany(targetEntity: LenderReview::class, mappedBy: 'UserID')]
+    private Collection $lenderReviews;
+
     public function __construct()
     {
         $this->objectTools = new ArrayCollection();
         $this->objectReviews = new ArrayCollection();
+        $this->lenderReviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,6 +174,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($objectReview->getUserID() === $this) {
                 $objectReview->setUserID(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LenderReview>
+     */
+    public function getLenderReviews(): Collection
+    {
+        return $this->lenderReviews;
+    }
+
+    public function addLenderReview(LenderReview $lenderReview): static
+    {
+        if (!$this->lenderReviews->contains($lenderReview)) {
+            $this->lenderReviews->add($lenderReview);
+            $lenderReview->setUserID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLenderReview(LenderReview $lenderReview): static
+    {
+        if ($this->lenderReviews->removeElement($lenderReview)) {
+            // set the owning side to null (unless already changed)
+            if ($lenderReview->getUserID() === $this) {
+                $lenderReview->setUserID(null);
             }
         }
 

@@ -20,6 +20,10 @@ class LenderReview
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
+    #[ORM\ManyToOne(inversedBy: 'lenderReviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $UserID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class LenderReview
     public function setComment(?string $comment): static
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getUserID(): ?User
+    {
+        return $this->UserID;
+    }
+
+    public function setUserID(?User $UserID): static
+    {
+        $this->UserID = $UserID;
 
         return $this;
     }
