@@ -20,6 +20,9 @@ class ObjectCategory
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\OneToOne(inversedBy: 'objectCategory', cascade: ['persist', 'remove'])]
+    private ?ObjectTool $ObjectID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class ObjectCategory
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getObjectID(): ?ObjectTool
+    {
+        return $this->ObjectID;
+    }
+
+    public function setObjectID(?ObjectTool $ObjectID): static
+    {
+        $this->ObjectID = $ObjectID;
 
         return $this;
     }

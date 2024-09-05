@@ -47,6 +47,9 @@ class ObjectTool
     #[ORM\OneToMany(targetEntity: BorrowObject::class, mappedBy: 'objectID', orphanRemoval: true)]
     private Collection $borrowObjects;
 
+    #[ORM\OneToOne(mappedBy: 'ObjectID', cascade: ['persist', 'remove'])]
+    private ?ObjectCategory $objectCategory = null;
+
     public function __construct()
     {
         $this->objectReviews = new ArrayCollection();
@@ -186,6 +189,28 @@ class ObjectTool
                 $borrowObject->setObjectID(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getObjectCategory(): ?ObjectCategory
+    {
+        return $this->objectCategory;
+    }
+
+    public function setObjectCategory(?ObjectCategory $objectCategory): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($objectCategory === null && $this->objectCategory !== null) {
+            $this->objectCategory->setObjectID(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($objectCategory !== null && $objectCategory->getObjectID() !== $this) {
+            $objectCategory->setObjectID($this);
+        }
+
+        $this->objectCategory = $objectCategory;
 
         return $this;
     }
