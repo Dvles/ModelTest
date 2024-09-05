@@ -48,11 +48,18 @@ class User
     #[ORM\OneToMany(targetEntity: LenderReview::class, mappedBy: 'UserID')]
     private Collection $lenderReviews;
 
+    /**
+     * @var Collection<int, BorrowObject>
+     */
+    #[ORM\OneToMany(targetEntity: BorrowObject::class, mappedBy: 'userID', orphanRemoval: true)]
+    private Collection $borrowObjects;
+
     public function __construct()
     {
         $this->objectTools = new ArrayCollection();
         $this->objectReviews = new ArrayCollection();
         $this->lenderReviews = new ArrayCollection();
+        $this->borrowObjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -204,6 +211,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($lenderReview->getUserID() === $this) {
                 $lenderReview->setUserID(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BorrowObject>
+     */
+    public function getBorrowObjects(): Collection
+    {
+        return $this->borrowObjects;
+    }
+
+    public function addBorrowObject(BorrowObject $borrowObject): static
+    {
+        if (!$this->borrowObjects->contains($borrowObject)) {
+            $this->borrowObjects->add($borrowObject);
+            $borrowObject->setUserID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrowObject(BorrowObject $borrowObject): static
+    {
+        if ($this->borrowObjects->removeElement($borrowObject)) {
+            // set the owning side to null (unless already changed)
+            if ($borrowObject->getUserID() === $this) {
+                $borrowObject->setUserID(null);
             }
         }
 
