@@ -24,6 +24,10 @@ class BorrowObject
     #[ORM\JoinColumn(nullable: false)]
     private ?ObjectTool $objectID = null;
 
+    #[ORM\ManyToOne(inversedBy: 'borrowObjects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +65,18 @@ class BorrowObject
     public function setObjectID(?ObjectTool $objectID): static
     {
         $this->objectID = $objectID;
+
+        return $this;
+    }
+
+    public function getUserID(): ?User
+    {
+        return $this->userID;
+    }
+
+    public function setUserID(?User $userID): static
+    {
+        $this->userID = $userID;
 
         return $this;
     }
