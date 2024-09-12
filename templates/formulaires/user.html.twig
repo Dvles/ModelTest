@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserFormulaireController!{% endblock %}
+
+{% block body %}
+<h1>Sign up today!</h1>
+
+{{ form_start (formulaireUser)}}
+
+{{ form_row (formulaireUser.name)}}
+{{ form_row (formulaireUser.email)}}
+{{ form_row (formulaireUser.password)}}
+{{ form_row (formulaireUser.community)}}
+<input type="submit" value="Insérer">
+{{ form_end (formulaireUser)}}
+{% endblock %}
