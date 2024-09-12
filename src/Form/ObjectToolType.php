@@ -20,14 +20,14 @@ class ObjectToolType extends AbstractType
             ->add('object_condition')
             ->add('prix_jour')
             ->add('image')
-            ->add('UserID', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('objectCategory', EntityType::class, [
-                'class' => ObjectCategory::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('UserID', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'id',
+            // ])
+            // ->add('objectCategory', EntityType::class, [
+            //     'class' => ObjectCategory::class,
+            //     'choice_label' => 'id',
+            // ])
         ;
     }
 

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Summary{% endblock %}
+
+{% block body %}
+    <h1>Thank you for signing up, {{ user.name }}!</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Community: {{ user.community }}</p>
+    {# Add any other data you want to display here #}
+{% endblock %}

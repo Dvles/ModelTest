@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserFormulaireController!{% endblock %}
+
+{% block body %}
+<h1>Add your object</h1>
+{{ form_start (formulaireObjectTool)}}
+
+{{ form_row (formulaireObjectTool.name)}}
+{{ form_row (formulaireObjectTool.description)}}
+{{ form_row (formulaireObjectTool.object_condition)}}
+{{ form_row (formulaireObjectTool.prix_jour)}}
+{{ form_row (formulaireObjectTool.image)}}
+
+<input type="submit" value="Insérer">
+{{ form_end (formulaireObjectTool)}}
+{% endblock %}
